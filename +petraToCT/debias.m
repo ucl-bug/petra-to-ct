@@ -24,8 +24,9 @@ function outputFilename = debias(inputFilename, outputFilename)
 %     petraToCT.debias(inputFilename, outputFilename)
 %
 % INPUTS / OUTPUTS:
-%     inputFilename - Pathname / filename for input image in nifti format.
-%     inputFilename - Pathname / filename for output image in nifti format.
+%     inputFilename     - Pathname / filename for input nifti image.
+%     outputFilename    - Pathname / filename for output nifti image. Can
+%                         be left empty to auto-generate output file name.
 
 % Copyright (C) 2023- University College London (Bradley Treeby).
 

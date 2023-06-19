@@ -9,9 +9,9 @@ function imageData = histogramNormalization(imageData, options)
 %
 %     By default, a plot of the histogram is produced. This should contain
 %     two clear peaks, which are labelled with vertical lines. If this
-%     fails for some reason, try increasing the values for NPeaks and
-%     MinPeakDistance until the last vertical line intersects the highest
-%     peak in the histogram.
+%     fails for some reason, try increasing the values for HistogramNPeaks
+%     and HistogramMinPeakDistance until the last vertical line intersects
+%     the highest peak in the histogram.
 %
 %     [1] Wiesinger, F., Sacolick, L.I., Menini, A., Kaushik, S.S., Ahn,
 %     S., Veit‐Haibach, P., Delso, G. and Shanbhag, D.D., 2016. Zero TE MR
@@ -22,26 +22,27 @@ function imageData = histogramNormalization(imageData, options)
 %     imageData = petraToCT.histogramNormalization(imageData, options)
 %
 % INPUTS / OUTPUTS:
-%     imageData - Image data to normalise.
+%     imageData         - Image data to normalise.
 %
 % OPTIONAL INPUTS:
-% Specify optional pairs of arguments as |Name1=Value1,...,NameN=ValueN|,
-% where |Name| is the argument name and |Value| is the corresponding value.
-% Name-value arguments must appear after other arguments, but the order of
-% the pairs does not matter.
+%     Specify optional pairs of arguments as Name1=Value1, where |Name| is
+%     the argument name and |Value| is the corresponding value. Name-value
+%     arguments must appear after other arguments, but the order of the
+%     pairs does not matter.
 %       
-%     Plot              - Boolean to plot histogram. Default = true.
-%     NPeaks            - Number of histogram peaks to find. Default = 2.
-%     MinPeakDistance   - Minimum distance between histogram peaks. Default
+%     HistogramMinPeakDistance   
+%                       - Minimum distance between histogram peaks. Default
 %                         = 50.
+%     HistogramNPeaks   - Number of histogram peaks to find. Default = 2.
+%     HistogramPlot     - Boolean to plot histogram. Default = true.
 
 % Copyright (C) 2023- University College London (Bradley Treeby).
 
 arguments
     imageData {mustBeNumeric, mustBeFinite}
-    options.Plot (1,1) logical = true
-    options.NPeaks (1,1) {mustBeInteger, mustBePositive} = 2
-    options.MinPeakDistance (1,1) {mustBeInteger, mustBePositive} = 50
+    options.HistogramPlot (1,1) logical = true
+    options.HistogramNPeaks (1,1) {mustBeInteger, mustBePositive} = 2
+    options.HistogramMinPeakDistance (1,1) {mustBeInteger, mustBePositive} = 50
 end
 
 % Take histogram.
@@ -53,11 +54,11 @@ hist_vals(1) = [];
 % Find peak corresponding to soft tissue.
 [pks, locs] = findpeaks(hist_vals, bins, ...
     'SortStr', 'descend', ...
-    'NPeaks', 2, ...
-    'MinPeakDistance', options.MinPeakDistance);
+    'NPeaks', options.HistogramNPeaks, ...
+    'MinPeakDistance', options.HistogramMinPeakDistance);
 
 % Plot histogram.
-if options.Plot
+if options.HistogramPlot
     figure;
     plot(bins, hist_vals);
     hold on;
