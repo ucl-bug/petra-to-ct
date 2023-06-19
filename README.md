@@ -90,6 +90,10 @@ petraToCT.convert('myImage.nii', DeleteSegmentation=false);
 
 To use the converted images with [k-Plan](https://k-plan.io), the images should be loaded using [this calibration file](docfiles/ct-calibration/ct-calibration-low-dose-30-March-2023-v1.h5). This was obtained using a CIRS Model 062M Electron Density Phantom using the same acquisition settings.
 
+## Limitations
+
+- Mapping air is not currently implemented (air properties currently set to soft tissue)
+
 ## Trouble shooting
 
 ### Histogram normalisation
