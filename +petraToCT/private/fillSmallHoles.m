@@ -1,4 +1,4 @@
-function bw_img = fillSmallHoles(bw_img, radius)
+function img = fillSmallHoles(img, options)
 %FILLSMALLHOLES Fill small holes in a binary image.
 %
 % DESCRIPTION:
@@ -10,37 +10,49 @@ function bw_img = fillSmallHoles(bw_img, radius)
 %     https://blogs.mathworks.com/steve/2008/08/05/filling-small-holes/ 
 %
 % USAGE:
-%     bw_img = fillSmallHoles(bw_img, max_hole_size)
+%     img = fillSmallHoles(img, options)
 %
 % INPUTS:
-%     bw_img        - 2D or 3D logical matrix.
+%     img           - 2D or 3D logical matrix.
 %
 % OPTIONAL INPUTS:
-%     radius        - Hole size used to set the number of pixels for
-%                     bwareaopen, where P = ceil(radius2measure(radius)).
+%     Specify optional pairs of arguments as Name1=Value1, where |Name| is
+%     the argument name and |Value| is the corresponding value. Name-value
+%     arguments must appear after other arguments, but the order of the
+%     pairs does not matter.
+%
+%     ImCloseSphereRadius   - Radius using for 'sphere' morphological
+%                             structuring element used with imclose.
+%                             Default = 1.
+%     MaximumHoleRadius     - Maximum hole size used to set the number of
+%                             pixels for bwareaopen, where P =
+%                             ceil(radius2measure(radius)).
 %
 % ABOUT:
 %     author        - Bradley E. Treeby
 %     date          - 19 July 2022
-%     last update   - 16 June 2023
+%     last update   - 19 June 2023
+
+% Copyright (C) 2023- University College London (Bradley Treeby).
 
 arguments
-    bw_img logical;
-    radius {mustBeNumeric} = 3;
+    img logical;
+    options.ImCloseSphereRadius = 1;
+    options.MaximumHoleRadius {mustBeNumeric} = 3;
 end
 
 % morphologically close the image
-bw_img = imclose(bw_img, strel('sphere', 1));
+img = imclose(img, strel('sphere', options.ImCloseSphereRadius));
 
 % identify the hole pixels using logical operator
-filled = imfill(bw_img, 'holes');
-holes = filled & ~bw_img;
+filled = imfill(img, 'holes');
+holes = filled & ~img;
 
 % use bwareaopen on the holes image to eliminate small holes
-bigholes = bwareaopen(holes, ceil(radius2measure(radius, ndims(bw_img))));
+bigholes = bwareaopen(holes, ceil(radius2measure(options.MaximumHoleRadius, ndims(img))));
 
 % use logical operators to identify small holes
 smallholes = holes & ~bigholes;
 
 % use a logical operator to fill in the small holes in the original image
-bw_img = bw_img | smallholes;
+img = img | smallholes;

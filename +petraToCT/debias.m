@@ -3,9 +3,9 @@ function outputFilename = debias(inputFilename, outputFilename)
 %
 % DESCRIPTION:
 %     debias debiases a nifti image using the N4ITKBiasFieldCorrection
-%     module that is packed with 3D Slicer. The number of iterations is set
-%     to 50,40,30,20,10 to give an output image with a very uniform image
-%     intensity.
+%     module that is packaged with 3D Slicer. The number of iterations is
+%     set to 50,40,30,20,10 to give an output image with a very uniform
+%     image intensity.
 % 
 %     Slicer must already be installed and added to system path. For
 %     example, in linux using:
@@ -30,7 +30,7 @@ function outputFilename = debias(inputFilename, outputFilename)
 % Copyright (C) 2023- University College London (Bradley Treeby).
 
 arguments
-    inputFilename {mustBeFile}
+    inputFilename char {mustBeFile}
     outputFilename = []
 end
 
@@ -39,6 +39,8 @@ if isempty(outputFilename)
     [pathname, filename, ext1] = fileparts(inputFilename);
     [~, filename, ext2] = fileparts(filename);
     outputFilename = fullfile(pathname, [filename '-debiased' ext2 ext1]);
+else
+    validateattributes( )
 end
 
 % Debias.

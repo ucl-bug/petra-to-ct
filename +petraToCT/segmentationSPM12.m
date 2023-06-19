@@ -1,9 +1,51 @@
 function [headMask, skullMask] = segmentationSPM12(inputFilename, options)
+%SEGMENTATIONSPM12 Segment nifti image using SPM12.
+%
+% DESCRIPTION:
+%     segmentationSPM12 segments a nifti image using SPM12. The skull and
+%     head masks returned by SPM are then processed using morphological
+%     operations to remove holes.
+%
+% USAGE:
+%     [headMask, skullMask] = segmentationSPM12(inputFilename, options)
+%
+% INPUTS:
+%     inputFilename         - Pathname / filename for input image in nifti
+%                             format. 
+%
+% OUTPUTS:
+%     headMask              - Head segmentation.
+%     skullMask             - Skull segmentation.
+%
+% OPTIONAL INPUTS:
+%     Specify optional pairs of arguments as Name1=Value1, where |Name| is
+%     the argument name and |Value| is the corresponding value. Name-value
+%     arguments must appear after other arguments, but the order of the
+%     pairs does not matter.
+%
+%     DeleteSegmentation    - Boolean controlling whether the raw SPM12
+%                             segmentation files are deleted. Default =
+%                             true.
+%     RunSegmentation       - Boolean controlling whether the SPM12
+%                             segmentation is called. Default = true. Can
+%                             be set to false to re-use a previous
+%                             segmentation called using DeleteSegmentation
+%                             = false.
+%     SkullMaskMaximumHoleRadius
+%                           - Maximum hole radius to fill. Default = 5.
+%     SkullMaskSmoothing    - Skull smoothing factor used to set the radius
+%                             using for the 'sphere' morphological
+%                             structuring element used with imclose as part
+%                             of fillSmallHoles. Default = 1.
+
+% Copyright (C) 2023- University College London (Bradley Treeby).
 
 arguments
     inputFilename {mustBeFile}
-    options.RunSegmentation (1,1) logical = true
     options.DeleteSegmentation (1,1) logical = true
+    options.RunSegmentation (1,1) logical = true
+    options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 5
+    options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
 end
 
 % Run segmentation.
@@ -32,7 +74,9 @@ skullMask = getLargestCC(skullMask);
 headMask = fillAllHoles(headMask, 3, 3);
 
 % Fill small holes in the skull mask.
-skullMask = fillSmallHoles(skullMask, 50);
+skullMask = fillSmallHoles(skullMask, ...
+    MaximumHoleRadius=options.SkullMaskMaximumHoleRadius, ...
+    ImCloseSphereRadius=options.SkullMaskSmoothing);
 
 % Delete segmentation images.
 if options.DeleteSegmentation
