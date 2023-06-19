@@ -8,7 +8,7 @@ MATLAB toolbox for converting a Siemens PETRA image to a pseudo-CT.
 
 Many therapeutic techniques, including transcranial ultrasound stimulation (TUS), require a structural computed tomography (CT) image of the head and skull for treatment planning. However, in a research setting, obtaining CT images can be problematic. This toolbox allows the conversion of a SIEMENS PETRA (pointwise encoding time reduction with radial acquisition) magnetic resonance (MR) image to a pseudo-CT image.
 
-<img src="docfiles/images/petra-pct.png" width="400" align="left">
+<img src="docfiles/images/petra-pct.png" width="400">
 
 The conversion broadly follows the steps outlined in two papers by Florian Wiesinger *et al* (see [here](https://doi.org/10.1002/mrm.25545) and [here](https://doi.org/10.1002/mrm.27134)), but using a different conversion curve derived from paired PETRA and low-dose CT images taken on three subjects. The steps are as follows:
 
@@ -96,11 +96,11 @@ To use the converted images with [k-Plan](https://k-plan.io), the images should 
 
 The plot produced by the histogram normalisation should look like the figure below, with a vertical line through the right-most peak in the histogram. If the histogram peak is not correctly identified, adjust the input values for `HistogramMinPeakDistance` and `HistogramNPeaks` until the peak is correctly identified.
 
-<img src="docfiles/images/image-histogram.png" width="400" align="left">
+<img src="docfiles/images/image-histogram.png" width="400">
 
 ### Holes in the mask
 
 If the converted pseudo-CT appears to have large regions of soft-tissue within the skull, try increasing the value of `SkullMaskSmoothing`, e.g., to 3 (from the default value of 1).
 
-<img src="docfiles/images/soft-tissue-in-skull.png" width="400" align="left">
+<img src="docfiles/images/soft-tissue-in-skull.png" width="400">
 
