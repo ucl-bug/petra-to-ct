@@ -74,6 +74,14 @@ After installation, the following setup steps must be performed
         (where `X.Y.Z` is the Slicer version number).
     
 
+### Conversion
+
+For the pseudo-CT generation, voxels in the background/air are set to-1000 HU and voxels in the head mask were assigned to 42 HU.
+
+Voxels in the skull mask were converted with a linear mapping: CT = -2928.8 * MRI + 3274.6. 
+This was obtained by taking the first principal component of the density plot of ZTE values versus CT values within the skull.
+
+<img src="docfiles/images/final_correlation.png" width="400">
 
 ## Usage
 
