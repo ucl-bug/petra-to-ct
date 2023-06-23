@@ -101,7 +101,7 @@ To use the converted images with [k-Plan](https://k-plan.io), the images should 
 
 ### Histogram normalisation
 
-The plot produced by the histogram normalisation should look like the figure below, with a vertical line through the right-most peak in the histogram. If the histogram peak is not correctly identified, adjust the input values for `HistogramMinPeakDistance` and `HistogramNPeaks` until the peak is correctly identified.
+The plot produced by the histogram normalisation should look like the figure below, with the right-most vertical line through the right-most peak in the histogram. If the histogram peak is not correctly identified, adjust the input values for `HistogramMinPeakDistance` and `HistogramNPeaks` until the peak is correctly identified.
 
 <img src="docfiles/images/image-histogram.png" width="400">
 
