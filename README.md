@@ -21,7 +21,7 @@ The conversion in Step 4 relies on the pre-processing performed in Steps 1 and 2
 
 ## MR protocol
 
-The conversion is derived from a pair-wise mapping between Siemens PETRA images and low-dose CT images. Thus, the PETRA images must always be acquired using the same sequence parameters. The scan parameters are available for download from the open-win platform. Some key parameters are given below.
+The conversion is derived from a pair-wise mapping between Siemens PETRA images and low-dose CT images. Thus, the PETRA images must always be acquired using the same sequence parameters. The scan parameters and Siemens EXAR file are stored in the `scanfiles` folder. Some key parameters are given below.
 
 General setup:
 
@@ -35,6 +35,9 @@ Key sequence parameters:
 - TE – 0.07 ms
 - Flip angle – 1 degree
 - Slices per slab – 320
+- Slice thickness – 0.75 mm
+
+Note, 3D distortion correction should be applied to the data after measurement.
 
 ## Setup
 
