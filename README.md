@@ -21,7 +21,7 @@ The conversion in Step 4 relies on the pre-processing performed in Steps 1 and 2
 
 ## MR protocol
 
-The conversion is derived from a pair-wise mapping between Siemens PETRA images and low-dose CT images. Thus, the PETRA images must always be acquired using the same sequence parameters. The scan parameters and Siemens EXAR file are stored in the `scanfiles` folder. Some key parameters are given below.
+The conversion is derived from a pair-wise mapping between Siemens PETRA images and low-dose CT images (see [Conversion](#conversion)). Thus, the PETRA images must always be acquired using the same sequence parameters. The scan parameters and Siemens EXAR file are stored in the `scanfiles` folder. Some key parameters are given below.
 
 General setup:
 
@@ -74,15 +74,6 @@ After installation, the following setup steps must be performed
         (where `X.Y.Z` is the Slicer version number).
     
 
-### Conversion
-
-For the pseudo-CT generation, voxels in the background/air are set to-1000 HU and voxels in the head mask were assigned to 42 HU.
-
-Voxels in the skull mask were converted with a linear mapping: CT = -2928.8 * MRI + 3274.6. 
-This was obtained by taking the first principal component of the density plot of ZTE values versus CT values within the skull.
-
-<img src="docfiles/images/final_correlation.png" width="400">
-
 ## Usage
 
 Convert a PETRA image to a pseudo-CT:
@@ -96,6 +87,22 @@ Convert, keeping the SPM segmentation:
 ```matlab
 petraToCT.convert('myImage.nii', DeleteSegmentation=false);
 ```
+
+## Conversion
+
+The conversion between PETRA and CT values in the skull bone was derived from PETRA and low-dose CT images taken of three subjects. The CT images were acquired using a GE Revolution CT. Some of the key parameters are listed below:
+
+- Slice thickness: 0.625 mm
+- Pixel spacing: 0.45 mm (typical value)
+- Convolution kernel: BONEPLUS
+- Tube current: 70 (typical value)
+- KVP: 80
+
+The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2928.8 \times \mathrm{MRI} + 3274.6$ between the voxel intensities within the skull was then obtained using principal component analysis. 
+
+The figure below shows a density plot of the CT HU in the skull against the normalised PETRA values for the voxels within the skull. The linear fit is shown with the white dashed line. For pseudo-CT generation, voxels in the background/air are set to -1000 HU and voxels in the head are set to 42 HU.
+
+<img src="docfiles/images/final_correlation.png" width="400">
 
 ## k-Plan calibration file
 
