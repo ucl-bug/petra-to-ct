@@ -103,9 +103,11 @@ The figure below shows a density plot of the CT HU in the skull against the corr
 
 <img src="docfiles/images/final_correlation.png" width="400">
 
-## k-Plan calibration file
+## Density conversion and k-Plan calibration file
 
-To use the converted images with [k-Plan](https://k-plan.io), the images should be loaded using [this calibration file](docfiles/ct-calibration/ct-calibration-low-dose-30-March-2023-v1.h5). This was obtained using a CIRS Model 062M Electron Density Phantom using the same acquisition settings.
+To calibrate the conversion between CT Hounsfield units and mass density for the low-dose CT protocol, a CT image of a CIRS Model 062M Electron Density Phantom was acquired using the same acquisition settings. The extracted curve is stored in `docfiles/ct-calibration` and shown below. To use the converted pseudo-CT images with [k-Plan](https://k-plan.io), the images should be loaded using [this calibration file](docfiles/ct-calibration/ct-calibration-low-dose-30-March-2023-v1.h5). 
+
+<img src="docfiles/images/ct-calibration.png" width="800">
 
 ## Limitations
 
