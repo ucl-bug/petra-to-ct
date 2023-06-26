@@ -70,7 +70,6 @@ After installation, the following setup steps must be performed
         C:\Users\username\AppData\Local\NA-MIC\Slicer X.Y.Z
         C:\Users\username\AppData\Local\NA-MIC\Slicer X.Y.Z\bin
         ```
-        
         (where `X.Y.Z` is the Slicer version number).
     
 
@@ -100,7 +99,7 @@ The conversion between PETRA and CT values in the skull bone was derived from PE
 
 The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2928.8 \times \mathrm{MRI} + 3274.6$ between the voxel intensities within the skull was then obtained using principal component analysis. 
 
-The figure below shows a density plot of the CT HU in the skull against the normalised PETRA values for the voxels within the skull. The linear fit is shown with the white dashed line. For pseudo-CT generation, voxels in the background/air are set to -1000 HU and voxels in the head are set to 42 HU.
+The figure below shows a density plot of the CT HU in the skull against the corresponding normalised PETRA values. The linear fit is shown with the white dashed line. For pseudo-CT generation, voxels in the background/air are set to -1000 HU and voxels in the head are set to 42 HU.
 
 <img src="docfiles/images/final_correlation.png" width="400">
 
