@@ -19,6 +19,8 @@ The conversion broadly follows the steps outlined in two papers by Florian Wiesi
 
 The conversion in Step 4 relies on the pre-processing performed in Steps 1 and 2. These steps must always be applied in the same way for the conversion to work correctly.
 
+An investigation into the accuracy of TUS simulations using an earlier version of this mapping is discussed [here](https://doi.org/10.1109/TUFFC.2022.3198522) (note, the conversion in this paper was based on a different dataset of paired ZTE and CT images).
+
 ## MR protocol
 
 The conversion is derived from a pair-wise mapping between Siemens PETRA images and low-dose CT images (see [Conversion](#conversion)). Thus, the PETRA images must always be acquired using the same sequence parameters. The scan parameters and Siemens EXAR file are stored in the `scanfiles` folder. Some key parameters are given below.
