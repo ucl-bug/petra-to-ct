@@ -112,6 +112,7 @@ To calibrate the conversion between CT Hounsfield units and mass density for the
 ## Limitations
 
 - Mapping air is not currently implemented (air properties currently set to soft tissue)
+- The linear mapping is currently derived from three subjects. We will continue to tweak the mapping curve as more data becomes available.
 
 ## Trouble shooting
 
