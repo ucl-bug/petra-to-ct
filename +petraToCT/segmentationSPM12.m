@@ -48,17 +48,25 @@ arguments
     options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
 end
 
+% Unzip if .nii.gz file.
+[pathname, filenname, ext] = fileparts(inputFilename);
+deleteUnzippedImage = false;
+if strcmp(ext, '.gz') && options.RunSegmentation
+    gunzip(inputFilename);
+    inputFilename = fullfile(pathname, filenname);
+    deleteUnzippedImage = true;
+end
+
 % Run segmentation.
 if options.RunSegmentation
     runSPMSegmentation(inputFilename)
 end
 
 % Load masks.
-[pathname, filename, ext1] = fileparts(inputFilename);
-[~, filename, ext2] = fileparts(filename);
+[pathname, filename, ~] = fileparts(inputFilename);
 
-headMaskFilename = fullfile(pathname, ['c5' filename ext2 ext1]);
-skullMaskFilename = fullfile(pathname, ['c4' filename ext2 ext1]);
+headMaskFilename = fullfile(pathname, ['c5' filename '.nii']);
+skullMaskFilename = fullfile(pathname, ['c4' filename '.nii']);
 
 headMask = load_nii(headMaskFilename);
 skullMask = load_nii(skullMaskFilename);
@@ -81,7 +89,12 @@ skullMask = fillSmallHoles(skullMask, ...
 % Delete segmentation images.
 if options.DeleteSegmentation
     for ind = 1:5
-        delete(fullfile(pathname, ['c' num2str(ind) filename ext2 ext1]));
+        delete(fullfile(pathname, ['c' num2str(ind) filename '.nii']));
     end
     delete(fullfile(pathname, [filename '_seg8.mat']));
+end
+
+% Delete unzipped gz image.
+if deleteUnzippedImage
+    delete(inputFilename);
 end
