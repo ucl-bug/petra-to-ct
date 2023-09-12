@@ -35,7 +35,7 @@ arguments
 end
 
 % dilate image
-if numDim(img) == 3
+if ndims(img) == 3
     img = imdilate(img, strel('sphere', dilationSize));
 else
     img = imdilate(img, strel('disk', dilationSize));
@@ -58,7 +58,7 @@ for dim_ind = 1:length(dims)
 end
 
 % erode image
-if numDim(img) == 3
+if ndims(img) == 3
     img = imerode(img, strel('sphere', dilationSize));
 else
     img = imerode(img, strel('disk', dilationSize));
