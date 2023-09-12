@@ -92,7 +92,7 @@ petraToCT.convert('myImage.nii', DeleteSegmentation=false);
 Re-run the conversion with a different smoothing, re-using a saved SPM segmentation:
 
 ```matlab
-petraToCT.convert('petra_registered.nii.gz', DeleteSegmentation=false, RunSegmentation=false, SkullMaskSmoothing=3)
+petraToCT.convert('myImage.nii', DeleteSegmentation=false, RunSegmentation=false, SkullMaskSmoothing=3)
 ```
 
 ## Conversion
