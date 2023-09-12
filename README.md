@@ -89,6 +89,12 @@ Convert, keeping the SPM segmentation:
 petraToCT.convert('myImage.nii', DeleteSegmentation=false);
 ```
 
+Re-run the conversion with a different smoothing, re-using a saved SPM segmentation:
+
+```matlab
+petraToCT.convert('petra_registered.nii.gz', DeleteSegmentation=false, RunSegmentation=false, SkullMaskSmoothing=3)
+```
+
 ## Conversion
 
 The conversion between PETRA and CT values in the skull bone was derived from PETRA and low-dose CT images taken of three subjects. The CT images were acquired using a GE Revolution CT. Some of the key parameters are listed below:

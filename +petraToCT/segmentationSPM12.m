@@ -51,10 +51,12 @@ end
 % Unzip if .nii.gz file.
 [pathname, filenname, ext] = fileparts(inputFilename);
 deleteUnzippedImage = false;
-if strcmp(ext, '.gz') && options.RunSegmentation
-    gunzip(inputFilename);
+if strcmp(ext, '.gz')
     inputFilename = fullfile(pathname, filenname);
-    deleteUnzippedImage = true;
+    if options.RunSegmentation
+        gunzip(inputFilename);
+        deleteUnzippedImage = true;
+    end
 end
 
 % Run segmentation.
