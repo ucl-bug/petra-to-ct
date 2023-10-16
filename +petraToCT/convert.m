@@ -38,12 +38,19 @@ function outputFilename = convert(inputFilename, outputFilename, options)
 %     DeleteSegmentation    - Boolean controlling whether the raw SPM12
 %                             segmentation files are deleted. Default =
 %                             true.
+%     HeadMaskSmoothing     - Head smoothing factor used to set the radius
+%                             using for the 'sphere' morphological
+%                             structuring element used as part of
+%                             fillAllHoles. Default = 3.
 %     HistogramMinPeakDistance   
 %                           - Minimum distance between histogram peaks.
 %                             Default = 50.
 %     HistogramNPeaks       - Number of histogram peaks to find. Default =
 %                             2. 
 %     HistogramPlot         - Boolean to plot histogram. Default = true.
+%     RunDebiasing          - Boolean controlling whether debias is called.
+%                             Default = true. Can be set to false to re-use
+%                             a previous debiasing.
 %     RunSegmentation       - Boolean controlling whether the SPM12
 %                             segmentation is called. Default = true. Can
 %                             be set to false to re-use a previous
@@ -61,10 +68,13 @@ arguments
     outputFilename = []
     options.Debias (1,1) logical = true
     options.DeleteSegmentation (1,1) logical = true
+    options.HeadMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 3;
     options.HistogramMinPeakDistance (1,1) {mustBeInteger, mustBePositive} = 50
     options.HistogramNPeaks (1,1) {mustBeInteger, mustBePositive} = 2
     options.HistogramPlot (1,1) logical = true
-    options.RunSegmentation (1,1) logical = true    
+    options.RunDebiasing (1,1) logical = true
+    options.RunSegmentation (1,1) logical = true
+    options.SaveMasks (1,1) logical = false
     options.SegmentationMethod = 'SPM12'
     options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 5
     options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
@@ -77,11 +87,18 @@ if isempty(outputFilename)
     [pathname, filename, ~] = fileparts(inputFilename);
     [~, filename, ~] = fileparts(filename);
     outputFilename = fullfile(pathname, [filename '-pct.nii.gz']);
+    skullMaskFilename = fullfile(pathname, [filename '-skull-mask.nii.gz']);
+    headMaskFilename = fullfile(pathname, [filename '-head-mask.nii.gz']);
 end
 
 % Debias the image.
 if options.Debias
-    debiasedFilename = debias(inputFilename);
+    [pathname, filename, ext1] = fileparts(inputFilename);
+    [~, filename, ext2] = fileparts(filename);
+    debiasedFilename = fullfile(pathname, [filename '-debiased' ext2 ext1]);
+    if options.RunDebiasing
+        debias(inputFilename, debiasedFilename);
+    end
 else
     debiasedFilename = inputFilename;
 end
@@ -93,7 +110,8 @@ switch options.SegmentationMethod
             RunSegmentation=options.RunSegmentation, ...
             DeleteSegmentation=options.DeleteSegmentation, ...
             SkullMaskMaximumHoleRadius=options.SkullMaskMaximumHoleRadius, ...
-            SkullMaskSmoothing=options.SkullMaskSmoothing);
+            SkullMaskSmoothing=options.SkullMaskSmoothing, ...
+            HeadMaskSmoothing=options.HeadMaskSmoothing);
     otherwise
         error('Unknown segmentation option.');
 end
@@ -120,3 +138,16 @@ imageDataNii.hdr.dime.scl_inter = 0;
 imageDataNii.hdr.hist.descrip = 'pseudoCT';
 
 save_nii(imageDataNii, outputFilename);
+
+% Save masks.
+if options.SaveMasks
+    imageDataNii.img = int16(headMask);
+    imageDataNii.hdr.dime.glmax = max(imageDataNii.img(:));
+    imageDataNii.hdr.dime.glmin = min(imageDataNii.img(:));
+    save_nii(imageDataNii, headMaskFilename);
+
+    imageDataNii.img = int16(skullMask);
+    imageDataNii.hdr.dime.glmax = max(imageDataNii.img(:));
+    imageDataNii.hdr.dime.glmin = min(imageDataNii.img(:));
+    save_nii(imageDataNii, skullMaskFilename);
+end

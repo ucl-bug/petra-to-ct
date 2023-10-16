@@ -26,6 +26,10 @@ function [headMask, skullMask] = segmentationSPM12(inputFilename, options)
 %     DeleteSegmentation    - Boolean controlling whether the raw SPM12
 %                             segmentation files are deleted. Default =
 %                             true.
+%     HeadMaskSmoothing     - Head smoothing factor used to set the radius
+%                             using for the 'sphere' morphological
+%                             structuring element used as part of
+%                             fillAllHoles. Default = 3.
 %     RunSegmentation       - Boolean controlling whether the SPM12
 %                             segmentation is called. Default = true. Can
 %                             be set to false to re-use a previous
@@ -43,6 +47,7 @@ function [headMask, skullMask] = segmentationSPM12(inputFilename, options)
 arguments
     inputFilename {mustBeFile}
     options.DeleteSegmentation (1,1) logical = true
+    options.HeadMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 3;
     options.RunSegmentation (1,1) logical = true
     options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 5
     options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
@@ -81,7 +86,7 @@ headMask = getLargestCC(headMask);
 skullMask = getLargestCC(skullMask);
 
 % Fill holes in the head mask.
-headMask = fillAllHoles(headMask, 3, 3);
+headMask = fillAllHoles(headMask, options.HeadMaskSmoothing, 3);
 
 % Fill small holes in the skull mask.
 skullMask = fillSmallHoles(skullMask, ...
