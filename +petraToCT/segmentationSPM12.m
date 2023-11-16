@@ -54,7 +54,7 @@ arguments
 end
 
 % Unzip if .nii.gz file.
-[pathname, filenname, ext] = fileparts(inputFilename);
+[pathname, filenname, ext] = fileparts(char(inputFilename));
 deleteUnzippedImage = false;
 if strcmp(ext, '.gz')
     inputFilename = fullfile(pathname, filenname);
@@ -70,7 +70,7 @@ if options.RunSegmentation
 end
 
 % Load masks.
-[pathname, filename, ~] = fileparts(inputFilename);
+[pathname, filename, ~] = fileparts(char(inputFilename));
 
 headMaskFilename = fullfile(pathname, ['c5' filename '.nii']);
 skullMaskFilename = fullfile(pathname, ['c4' filename '.nii']);

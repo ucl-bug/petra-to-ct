@@ -37,7 +37,7 @@ end
 
 % Set output filename.
 if isempty(outputFilename)
-    [pathname, filename, ext1] = fileparts(inputFilename);
+    [pathname, filename, ext1] = fileparts(char(inputFilename));
     [~, filename, ext2] = fileparts(filename);
     outputFilename = fullfile(pathname, [filename '-debiased' ext2 ext1]);
 else
