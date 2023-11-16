@@ -84,7 +84,7 @@ import petraToCT.*
 
 % Set output filename.
 if isempty(outputFilename)
-    [pathname, filename, ~] = fileparts(inputFilename);
+    [pathname, filename, ~] = fileparts(char(inputFilename));
     [~, filename, ~] = fileparts(filename);
     outputFilename = fullfile(pathname, [filename '-pct.nii.gz']);
     skullMaskFilename = fullfile(pathname, [filename '-skull-mask.nii.gz']);
@@ -93,7 +93,7 @@ end
 
 % Debias the image.
 if options.Debias
-    [pathname, filename, ext1] = fileparts(inputFilename);
+    [pathname, filename, ext1] = fileparts(char(inputFilename));
     [~, filename, ext2] = fileparts(filename);
     debiasedFilename = fullfile(pathname, [filename '-debiased' ext2 ext1]);
     if options.RunDebiasing
