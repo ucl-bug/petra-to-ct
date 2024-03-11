@@ -10,7 +10,7 @@ Many therapeutic techniques, including transcranial ultrasound stimulation (TUS)
 
 <img src="docfiles/images/petra-pct.png" width="400">
 
-The conversion broadly follows the steps outlined in two papers by Florian Wiesinger *et al* (see [here](https://doi.org/10.1002/mrm.25545) and [here](https://doi.org/10.1002/mrm.27134)), but using a different conversion curve derived from paired PETRA and low-dose CT images taken on three subjects. The steps are as follows:
+The conversion broadly follows the steps outlined in two papers by Florian Wiesinger *et al* (see [here](https://doi.org/10.1002/mrm.25545) and [here](https://doi.org/10.1002/mrm.27134)), but using a different conversion curve derived from paired PETRA and low-dose CT images taken on seven subjects. The steps are as follows:
 
 1. Debiasing the image using [N4ITK MRI bias correction](https://doi.org/10.1109/tmi.2010.2046908).
 2. Applying histogram normalisation to shift the soft-tissue peak to 1.
@@ -97,7 +97,7 @@ petraToCT.convert('myImage.nii', DeleteSegmentation=false, RunSegmentation=false
 
 ## Conversion
 
-The conversion between PETRA and CT values in the skull bone was derived from PETRA and low-dose CT images taken of three subjects. The CT images were acquired using a GE Revolution CT. Some of the key parameters are listed below:
+The conversion between PETRA and CT values in the skull bone was derived from PETRA and low-dose CT images taken of seven subjects. The CT images were acquired using a GE Revolution CT. Some of the key parameters are listed below:
 
 - Slice thickness: 0.625 mm
 - Pixel spacing: 0.45 mm (typical value)
@@ -105,11 +105,11 @@ The conversion between PETRA and CT values in the skull bone was derived from PE
 - Tube current: 70 (typical value)
 - KVP: 80
 
-The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2929.6 \times \mathrm{MRI} + 3274.9$ between the voxel intensities within the skull was then obtained using principal component analysis. 
+The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2940.3 \times \mathrm{MRI} + 3291.1$ between the voxel intensities within the skull was then obtained using principal component analysis. 
 
 The figure below shows a density plot of the CT HU in the skull against the corresponding normalised PETRA values (as described in [Histogram Normalisation](#histogram-normalisation) below). The linear fit is shown with the white dashed line. For pseudo-CT generation, voxels in the background/air are set to -1000 HU and voxels in the head are set to 42 HU.
 
-<img src="docfiles/images/final_correlation.png" width="400">
+<img src="docfiles/images/final_correlation_7S.png" width="400">
 
 ## Density conversion and k-Plan calibration file
 
@@ -120,7 +120,7 @@ To calibrate the conversion between CT Hounsfield units and mass density for the
 ## Limitations
 
 - Mapping air is not currently implemented (air properties currently set to soft tissue)
-- The linear mapping is currently derived from three subjects. We will continue to tweak the mapping curve as more data becomes available.
+- The linear mapping is currently derived from seven subjects. We will continue to tweak the mapping curve as more data becomes available.
 
 ## Trouble shooting
 
