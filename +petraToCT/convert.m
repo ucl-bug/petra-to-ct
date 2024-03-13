@@ -125,7 +125,7 @@ imageData = histogramNormalization(single(imageDataNii.img));
 % Convert image.
 pCT = -1000 * ones(size(imageData));
 pCT(headMask == 1) = 42;
-pCT(skullMask == 1) = -2940.3054 * imageData(skullMask == 1) + 3291.1067; 
+pCT(skullMask == 1) = -2940.2346 * imageData(skullMask == 1) + 3291.0659; 
 
 
 % Save output.

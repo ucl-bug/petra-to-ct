@@ -105,7 +105,7 @@ The conversion between PETRA and CT values in the skull bone was derived from PE
 - Tube current: 70 (typical value)
 - KVP: 80
 
-The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2940.3 \times \mathrm{MRI} + 3291.1$ between the voxel intensities within the skull was then obtained using principal component analysis. 
+The PETRA and CT image pairs were co-registered, and a linear mapping of $\mathrm{CT} = -2940.2 \times \mathrm{MRI} + 3291.1$ between the voxel intensities within the skull was then obtained using principal component analysis. 
 
 The figure below shows a density plot of the CT HU in the skull against the corresponding normalised PETRA values (as described in [Histogram Normalisation](#histogram-normalisation) below). The linear fit is shown with the white dashed line. For pseudo-CT generation, voxels in the background/air are set to -1000 HU and voxels in the head are set to 42 HU.
 
