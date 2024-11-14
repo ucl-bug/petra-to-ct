@@ -102,7 +102,10 @@ end
 imageDataNii = load_nii(debiasedFilename);
 
 % Histogram normalisation.
-imageData = histogramNormalization(single(imageDataNii.img));
+imageData = histogramNormalization(single(imageDataNii.img), ...
+    HistogramPlot=options.HistogramPlot, ...
+    HistogramNPeaks=options.HistogramNPeaks, ...
+    HistogramMinPeakDistance=options.HistogramMinPeakDistance);
 
 % Convert image.
 pCT = -1000 * ones(size(imageData));
