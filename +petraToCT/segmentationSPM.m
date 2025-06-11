@@ -54,7 +54,7 @@ deleteUnzippedImage = false;
 if strcmp(ext, '.gz')
     inputFilename = fullfile(pathname, filenname);
     if options.RunSegmentation
-        gunzip(inputFilename);
+        gunzip([inputFilename '.gz']);
         deleteUnzippedImage = true;
     end
 end
