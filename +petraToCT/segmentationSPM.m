@@ -7,11 +7,11 @@ function [headMask, skullMask] = segmentationSPM(inputFilename, options)
 %     operations to remove holes.
 %
 % USAGE:
-%     [headMask, skullMask] = segmentationSPM(inputFilename, options)
+%     [headMask, skullMask] = petraToCT.segmentationSPM(inputFilename, options)
 %
 % INPUTS:
 %     inputFilename         - Pathname / filename for input image in nifti
-%                             format. 
+%                             format.
 %
 % OUTPUTS:
 %     headMask              - Head segmentation.
@@ -23,29 +23,34 @@ function [headMask, skullMask] = segmentationSPM(inputFilename, options)
 %     arguments must appear after other arguments, but the order of the
 %     pairs does not matter.
 %
-%     DeleteSegmentation    - Boolean controlling whether the raw SPM
-%                             segmentation files are deleted. Default =
-%                             true.
+%     HeadThreshold         - Threshold for head mask. Default = 0.5.
+%     MaskPlot              - Boolean controlling whether the masks are
+%                             plotted using sliceViewer. Default = false.
+%     OutputDir             - Directory for saving SPM images. Default is
+%                             the same directory as the input image.
 %     RunSegmentation       - Boolean controlling whether the SPM
 %                             segmentation is called. Default = true. Can
 %                             be set to false to re-use a previous
-%                             segmentation called using DeleteSegmentation
-%                             = false.
+%                             segmentation.
 %     SkullMaskMaximumHoleRadius
-%                           - Maximum hole radius to fill. Default = 5.
+%                           - Maximum hole radius to fill. Default = 100.
 %     SkullMaskSmoothing    - Skull smoothing factor used to set the radius
 %                             using for the 'sphere' morphological
 %                             structuring element used with imclose as part
 %                             of fillSmallHoles. Default = 1.
+%     SkullThreshold        - Threshold for skull mask. Default = 0.5.
 
 % Copyright (C) 2023- University College London (Bradley Treeby).
 
 arguments
     inputFilename {mustBeFile}
-    options.DeleteSegmentation (1,1) logical = true
+    options.HeadThreshold (1,1) {mustBeNumeric, mustBePositive} = 0.5;
+    options.MaskPlot (1,1) logical = false
+    options.OutputDir = []
     options.RunSegmentation (1,1) logical = true
-    options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 5
-    options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
+    options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 100
+    options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 2;
+    options.SkullThreshold (1,1) {mustBeNumeric, mustBePositive} = 0.5;
 end
 
 % Unzip if .nii.gz file.
@@ -59,26 +64,38 @@ if strcmp(ext, '.gz')
     end
 end
 
+% Set output directory
+if isempty(options.OutputDir)
+    [pathname, ~, ~] = fileparts(inputFilename);
+    options.OutputDir = pathname;
+end
+
 % Run segmentation.
 if options.RunSegmentation
-    runSPMSegmentation(inputFilename)
+    runSPMSegmentation(inputFilename, options.OutputDir)
 end
 
 % Load masks.
-[pathname, filename, ~] = fileparts(inputFilename);
-
-headMaskFilename = fullfile(pathname, ['c5' filename '.nii']);
-skullMaskFilename = fullfile(pathname, ['c4' filename '.nii']);
+headMaskFilename = fullfile(options.OutputDir, 'spm_soft_tissue_seg.nii');
+skullMaskFilename = fullfile(options.OutputDir, 'spm_bone_seg.nii');
 
 headMask = load_nii(headMaskFilename);
 skullMask = load_nii(skullMaskFilename);
 
-headMask = (headMask.img > 0.75);
-skullMask = (skullMask.img > 0.75);
+if options.MaskPlot
+    plot_image = cat(1, headMask.img, skullMask.img);
+end
+
+headMask = (headMask.img > options.HeadThreshold);
+skullMask = (skullMask.img > options.SkullThreshold);
 
 % Get largest connected component.
 headMask = getLargestCC(headMask);
 skullMask = getLargestCC(skullMask);
+
+if options.MaskPlot
+    plot_image = cat(2, plot_image, cat(1, headMask, skullMask));
+end
 
 % Fill holes in the head mask.
 headMask = fillAllHoles(headMask, 3, 3);
@@ -88,12 +105,11 @@ skullMask = fillSmallHoles(skullMask, ...
     MaximumHoleRadius=options.SkullMaskMaximumHoleRadius, ...
     ImCloseSphereRadius=options.SkullMaskSmoothing);
 
-% Delete segmentation images.
-if options.DeleteSegmentation
-    for ind = 1:5
-        delete(fullfile(pathname, ['c' num2str(ind) filename '.nii']));
-    end
-    delete(fullfile(pathname, [filename '_seg8.mat']));
+if options.MaskPlot
+    plot_image = cat(2, plot_image, cat(1, headMask, skullMask));
+    figure;
+    sliceViewer(plot_image)
+    title('SPM Masks / Thresholded Masks / Filled Masks')
 end
 
 % Delete unzipped gz image.
