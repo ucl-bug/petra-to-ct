@@ -1,13 +1,13 @@
-function [headMask, skullMask] = segmentationSPM12(inputFilename, options)
-%SEGMENTATIONSPM12 Segment nifti image using SPM12.
+function [headMask, skullMask] = segmentationSPM(inputFilename, options)
+%SEGMENTATIONSPM Segment nifti image using SPM.
 %
 % DESCRIPTION:
-%     segmentationSPM12 segments a nifti image using SPM12. The skull and
+%     segmentationSPM segments a nifti image using SPM. The skull and
 %     head masks returned by SPM are then processed using morphological
 %     operations to remove holes.
 %
 % USAGE:
-%     [headMask, skullMask] = segmentationSPM12(inputFilename, options)
+%     [headMask, skullMask] = segmentationSPM(inputFilename, options)
 %
 % INPUTS:
 %     inputFilename         - Pathname / filename for input image in nifti
@@ -23,10 +23,10 @@ function [headMask, skullMask] = segmentationSPM12(inputFilename, options)
 %     arguments must appear after other arguments, but the order of the
 %     pairs does not matter.
 %
-%     DeleteSegmentation    - Boolean controlling whether the raw SPM12
+%     DeleteSegmentation    - Boolean controlling whether the raw SPM
 %                             segmentation files are deleted. Default =
 %                             true.
-%     RunSegmentation       - Boolean controlling whether the SPM12
+%     RunSegmentation       - Boolean controlling whether the SPM
 %                             segmentation is called. Default = true. Can
 %                             be set to false to re-use a previous
 %                             segmentation called using DeleteSegmentation

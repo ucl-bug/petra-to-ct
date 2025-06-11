@@ -7,8 +7,8 @@ function outputFilename = debias(inputFilename, outputFilename)
 %     set to 50,40,30,20,10 to give an output image with a very uniform
 %     image intensity.
 %
-%     Slicer must already be installed and added to system path. For
-%     example, in linux using:
+%     For linux and windows, Slicer must already be installed and added to
+%     system path. For example, in linux using:
 %
 %         export PATH="/path/to/Slicer-5.0.2-linux-amd64:$PATH"
 %
@@ -46,15 +46,16 @@ end
 
 % Debias.
 if ismac
-    % Find the N4ITKBiasFieldCorrection executable
+
+    % Find the N4ITKBiasFieldCorrection executable.
     [status, n4path] = system('find /Applications/Slicer.app -name "N4ITKBiasFieldCorrection" -type f 2>/dev/null | grep -E "cli-modules/N4ITKBiasFieldCorrection$" | head -1');
-    n4path = strtrim(n4path);  % Remove trailing newline
+    n4path = strtrim(n4path);
 
     if isempty(n4path) || status ~= 0
-        error('Could not find N4ITKBiasFieldCorrection executable. Make sure Slicer is installed in /Applications/');
+        error('Could not find N4ITKBiasFieldCorrection executable. Make sure Slicer is installed in /Applications/.');
     end
 
-    % Run the command directly
+    % Run the command directly.
     cmd = sprintf('"%s" "%s" "%s" --iterations 50,40,30,20,10', n4path, inputFilename, outputFilename);
     system(cmd);
 

@@ -2,7 +2,7 @@ function runSPMSegmentation(inputFilename)
 %RUNSPMSEGMENTATION Run SPM segmentation.
 %
 % DESCRIPTION:
-%     runSPMSegmentation segments an input image using SPM12. SPM must be
+%     runSPMSegmentation segments an input image using SPM. SPM must be
 %     installed and on the MATLAB path. The output images are stored in the
 %     same path as the input image.
 %

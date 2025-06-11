@@ -7,9 +7,9 @@ function outputFilename = convert(inputFilename, outputFilename, options)
 %
 %         1. Debiasing the image using N4ITK MRI bias correction
 %         2. Applying histogram normalisation to shift the soft-tissue peak
-%            to 1. 
-%         3. Segmenting the skull and head in the image using SPM12,
-%            followed by morphological operations in MATLAB. 
+%            to 1.
+%         3. Segmenting the skull and head in the image using SPM,
+%            followed by morphological operations in MATLAB.
 %         4. Applying a linear mapping to MR voxel values in the skull
 %            bone, and using fixed values elsewhere in the head.
 %
@@ -35,16 +35,20 @@ function outputFilename = convert(inputFilename, outputFilename, options)
 %     arguments must appear after other arguments, but the order of the
 %     pairs does not matter.
 %
-%     DeleteSegmentation    - Boolean controlling whether the raw SPM12
+%     Debias                - Boolean controlling whether the image is
+%                             debiased using N4ITK MRI bias correction.
+%                             Default = true. If set to false, the input
+%                             image is used directly.
+%     DeleteSegmentation    - Boolean controlling whether the raw SPM
 %                             segmentation files are deleted. Default =
 %                             true.
-%     HistogramMinPeakDistance   
+%     HistogramMinPeakDistance
 %                           - Minimum distance between histogram peaks.
 %                             Default = 50.
 %     HistogramNPeaks       - Number of histogram peaks to find. Default =
-%                             2. 
+%                             2.
 %     HistogramPlot         - Boolean to plot histogram. Default = true.
-%     RunSegmentation       - Boolean controlling whether the SPM12
+%     RunSegmentation       - Boolean controlling whether the SPM
 %                             segmentation is called. Default = true. Can
 %                             be set to false to re-use a previous
 %                             segmentation called using DeleteSegmentation
@@ -64,8 +68,8 @@ arguments
     options.HistogramMinPeakDistance (1,1) {mustBeInteger, mustBePositive} = 50
     options.HistogramNPeaks (1,1) {mustBeInteger, mustBePositive} = 2
     options.HistogramPlot (1,1) logical = true
-    options.RunSegmentation (1,1) logical = true    
-    options.SegmentationMethod = 'SPM12'
+    options.RunSegmentation (1,1) logical = true
+    options.SegmentationMethod = 'SPM'
     options.SkullMaskMaximumHoleRadius (1,1) {mustBeNumeric, mustBePositive} = 5
     options.SkullMaskSmoothing (1,1) {mustBeNumeric, mustBePositive} = 1;
 end
@@ -88,8 +92,8 @@ end
 
 % Get segmentation.
 switch options.SegmentationMethod
-    case 'SPM12'
-        [headMask, skullMask] = segmentationSPM12(debiasedFilename, ...
+    case 'SPM'
+        [headMask, skullMask] = segmentationSPM(debiasedFilename, ...
             RunSegmentation=options.RunSegmentation, ...
             DeleteSegmentation=options.DeleteSegmentation, ...
             SkullMaskMaximumHoleRadius=options.SkullMaskMaximumHoleRadius, ...
