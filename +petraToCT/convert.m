@@ -47,7 +47,8 @@ function pctFilename = convert(inputFilename, options)
 %                             2.
 %     HistogramPlot         - Boolean to plot histogram. Default = true.
 %     MaskPlot              - Boolean to plot masks. Default = false.
-%     OutputDir             - Directory for saving output images.
+%     OutputDir             - Directory for saving output images. Defaults
+%                             to '<inputFolder>/PetraToCT'.
 %     RunSegmentation       - Boolean controlling whether the SPM
 %                             segmentation is called. Default = true. Can
 %                             be set to false to use the SPM masks from a
