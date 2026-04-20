@@ -146,6 +146,18 @@ To calibrate the conversion between CT Hounsfield units and mass density for the
 
 <img src="docfiles/images/ct-calibration.png" width="800">
 
+## Testing
+
+The `tests` folder contains unit tests for the toolbox, written using the MATLAB [class-based unit testing framework](https://uk.mathworks.com/help/matlab/class-based-unit-tests.html). To run all tests from the repository root:
+
+```matlab
+runtests("tests")
+```
+
+Each test class mirrors one source file and is named `<thingUnderTest>Test.m`. The helper `tests/getSourceRoot.m` is called from each test's `TestClassSetup` to add the toolbox to the MATLAB path, so tests can be run without any manual path setup.
+
+Integration tests that depend on external tools (SPM, 3D Slicer) use `assumeTrue` guards and are filtered — not failed — when those dependencies are not available.
+
 ## Limitations
 
 - Mapping air is not currently implemented (air properties currently set to soft tissue)
