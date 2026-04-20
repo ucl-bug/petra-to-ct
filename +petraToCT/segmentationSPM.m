@@ -53,6 +53,8 @@ arguments
     options.SkullThreshold (1,1) {mustBeNumeric, mustBePositive} = 0.5;
 end
 
+import petraToCT.tools.*
+
 % Unzip if .nii.gz file.
 [pathname, filenname, ext] = fileparts(inputFilename);
 deleteUnzippedImage = false;

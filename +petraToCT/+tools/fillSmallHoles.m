@@ -41,6 +41,8 @@ arguments
     options.MaximumHoleRadius {mustBeNumeric} = 3;
 end
 
+import petraToCT.tools.radius2measure
+
 % morphologically close the image
 img = imclose(img, strel('sphere', options.ImCloseSphereRadius));
 
