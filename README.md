@@ -1,5 +1,7 @@
 # PETRA-TO-CT
 
+[![CI](https://github.com/ucl-bug/petra-to-ct/actions/workflows/ci.yml/badge.svg)](https://github.com/ucl-bug/petra-to-ct/actions/workflows/ci.yml)
+
 MATLAB toolbox for converting a Siemens PETRA image to a pseudo-CT.
 
 :warning: *This repository is still under development. Breaking changes may occur!*
@@ -145,6 +147,29 @@ The figure below shows a density plot of the CT HU in the skull against the corr
 To calibrate the conversion between CT Hounsfield units and mass density for the low-dose CT protocol, a CT image of a CIRS Model 062M Electron Density Phantom was acquired using the same acquisition settings. The extracted curve is stored in `docfiles/ct-calibration` and shown below. To use the converted pseudo-CT images with [k-Plan](https://k-plan.io), the images should be loaded using [this calibration file](docfiles/ct-calibration/ct-calibration-low-dose-30-March-2023-v1.kct).
 
 <img src="docfiles/images/ct-calibration.png" width="800">
+
+## Testing
+
+The `tests` folder contains tests for the toolbox, written using the MATLAB [class-based unit testing framework](https://uk.mathworks.com/help/matlab/class-based-unit-tests.html). Tests are split into two subfolders:
+
+- `tests/unit` — fast, self-contained tests that run without any external dependencies.
+- `tests/integration` — end-to-end tests that require SPM, 3D Slicer, and a real PETRA fixture (see `tests/fixtures`). These tests use `assumeTrue` guards and are filtered — not failed — when the dependencies are not available.
+
+To run all tests from the repository root:
+
+```matlab
+runtests("tests", IncludeSubfolders=true)
+```
+
+To run only the unit tests:
+
+```matlab
+runtests("tests/unit")
+```
+
+Each test class mirrors one source file and is named `<thingUnderTest>Test.m`. Tests add the toolbox to the MATLAB path from their `TestClassSetup`, so no manual path setup is needed.
+
+The unit tier runs automatically on every push and pull request via GitHub Actions (see `.github/workflows/ci.yml`). The integration tier is local-only — it is gated with `assumeTrue` and will report as *filtered* in CI because SPM and 3D Slicer are not installed on the hosted runner.
 
 ## Limitations
 
