@@ -78,6 +78,7 @@ arguments
 end
 
 import petraToCT.*
+import petraToCT.tools.*
 
 % Set output directory
 if ~isfield(options, 'OutputDir')
@@ -128,7 +129,7 @@ imageData = histogramNormalization(single(imageDataNii.img), ...
     HistogramMinPeakDistance=options.HistogramMinPeakDistance);
 
 % Convert image.
-pCT = tools.applyHUMapping(imageData, logical(headMask), logical(skullMask));
+pCT = applyHUMapping(imageData, logical(headMask), logical(skullMask));
 
 % Save output re-using header of input file.
 imageDataNii.img = int16(pCT);

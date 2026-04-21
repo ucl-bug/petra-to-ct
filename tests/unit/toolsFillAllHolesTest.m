@@ -10,8 +10,9 @@ classdef toolsFillAllHolesTest < matlab.unittest.TestCase
 
     methods (TestClassSetup)
         function addSourceToPath(tc)
-            addpath(getSourceRoot());
-            tc.addTeardown(@() rmpath(getSourceRoot()));
+            root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
+            addpath(root);
+            tc.addTeardown(@() rmpath(root));
         end
     end
 

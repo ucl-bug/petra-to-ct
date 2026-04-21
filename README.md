@@ -148,15 +148,24 @@ To calibrate the conversion between CT Hounsfield units and mass density for the
 
 ## Testing
 
-The `tests` folder contains unit tests for the toolbox, written using the MATLAB [class-based unit testing framework](https://uk.mathworks.com/help/matlab/class-based-unit-tests.html). To run all tests from the repository root:
+The `tests` folder contains tests for the toolbox, written using the MATLAB [class-based unit testing framework](https://uk.mathworks.com/help/matlab/class-based-unit-tests.html). Tests are split into two subfolders:
+
+- `tests/unit` — fast, self-contained tests that run without any external dependencies.
+- `tests/integration` — end-to-end tests that require SPM, 3D Slicer, and a real PETRA fixture (see `tests/fixtures`). These tests use `assumeTrue` guards and are filtered — not failed — when the dependencies are not available.
+
+To run all tests from the repository root:
 
 ```matlab
-runtests("tests")
+runtests("tests", IncludeSubfolders=true)
 ```
 
-Each test class mirrors one source file and is named `<thingUnderTest>Test.m`. The helper `tests/getSourceRoot.m` is called from each test's `TestClassSetup` to add the toolbox to the MATLAB path, so tests can be run without any manual path setup.
+To run only the unit tests:
 
-Integration tests that depend on external tools (SPM, 3D Slicer) use `assumeTrue` guards and are filtered — not failed — when those dependencies are not available.
+```matlab
+runtests("tests/unit")
+```
+
+Each test class mirrors one source file and is named `<thingUnderTest>Test.m`. Tests add the toolbox to the MATLAB path from their `TestClassSetup`, so no manual path setup is needed.
 
 ## Limitations
 
