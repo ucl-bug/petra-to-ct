@@ -1,5 +1,7 @@
 # PETRA-TO-CT
 
+[![CI](https://github.com/ucl-bug/petra-to-ct/actions/workflows/ci.yml/badge.svg)](https://github.com/ucl-bug/petra-to-ct/actions/workflows/ci.yml)
+
 MATLAB toolbox for converting a Siemens PETRA image to a pseudo-CT.
 
 :warning: *This repository is still under development. Breaking changes may occur!*
@@ -166,6 +168,8 @@ runtests("tests/unit")
 ```
 
 Each test class mirrors one source file and is named `<thingUnderTest>Test.m`. Tests add the toolbox to the MATLAB path from their `TestClassSetup`, so no manual path setup is needed.
+
+The unit tier runs automatically on every push and pull request via GitHub Actions (see `.github/workflows/ci.yml`). The integration tier is local-only — it is gated with `assumeTrue` and will report as *filtered* in CI because SPM and 3D Slicer are not installed on the hosted runner.
 
 ## Limitations
 
